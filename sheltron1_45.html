@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SHELTRON • DJ / Photo+Video / Design</title>
+  <meta name="description" content="Sheltron — DJ, photography & video, and graphic design portfolio" />
+  <style>
+    /* ========= Mac OS 9 (Platinum) inspired theme ========= */
+    :root{
+      --platinum-bg: #c0c0c0;           /* desktop gray */
+      --window-bg: #d9d9d9;             /* window face */
+      --window-dark: #8c8c8c;           /* dark edge */
+      --window-mid: #b5b5b5;            /* mid edge */
+      --window-light: #f5f5f5;          /* light edge */
+      --titlebar: #000080;              /* deep blue titlebar */
+      --title-text: #ffffff;
+      --link: #0000cc;
+      --menubar-h: 44px;
+      --menubar-bg: #ffffff;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", Geneva, Tahoma, Arial, sans-serif;
+      background: url("images/background.png") no-repeat center center fixed;
+	  background-color: cornflowerblue;
+      color:#111; line-height:1.45;
+      padding-top: var(--menubar-h);
+    }
+    footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 16px;
+  text-align: center;
+}
+	  a{color:var(--link)}
+    .container{max-width:1100px; margin: 16px auto; padding: 0 16px;}
+
+    /* ===== Top Menu Bar (white) ===== */
+    .menubar{
+      position:fixed; inset:0 auto auto 0; width:100%; height:var(--menubar-h);
+      background: var(--menubar-bg); color:#000; border-bottom:1px solid #d0d0d0;
+      display:flex; align-items:center; gap:12px; padding:0 12px; z-index:1000;
+    }
+    .menubar-left{ display:flex; align-items:center; gap:10px; }
+    .brand-logo{ width:22px; height:22px; object-fit:contain; image-rendering: crisp-edges; image-rendering: pixelated; }
+    .brand-name{ font-weight:600; font-size:14px; }
+    .menubar-spacer{ flex:1; }
+    .clock{ font-variant-numeric: tabular-nums; font-size:13px; opacity:.9; margin-right: 20px; }
+
+    /* ===== Desktop with app icons ===== */
+    .desktop{ display:grid; flex-direction: column;   align-items: flex-start;  gap: 16px; align-items:start; justify-items:start; min-height:120px; margin-bottom:16px; }
+    .app-icon{ appearance:none; background:transparent; border:none; text-align:center; width:96px; cursor:default; }
+    .app-icon img{ width:64px; height:64px; image-rendering: crisp-edges; image-rendering: pixelated; display:block; margin:0 auto 6px; }
+    .app-icon span{ display:block; background:rgba(255,255,255,0); padding:2px 6px; var(--window-dark); -1px -1px 0 var(--window-dark), inset 1px 1px 0 var(--window-light); font-size:12px; }
+    .app-icon.selected span{ background:rgba(0,0,128,.18); outline:2px dotted #000; outline-offset:2px; }
+
+    /* ===== Window styling ===== */
+    .window{ background:var(--window-bg); width:min(100%, 1100px); position:fixed; top:calc(var(--menubar-h) + 16px); left:50%; transform:translateX(-50%); z-index:1; display:none; max-height:calc(100vh - var(--menubar-h) - 32px); overflow:auto; }
+    .window.active{ display:block; }
+    .window{
+      box-shadow:
+        inset -1px -1px 0 var(--window-dark),
+        inset 1px 1px 0 var(--window-light),
+        inset -2px -2px 0 var(--window-mid),
+        inset 2px 2px 0 #fff;
+      border:1px solid var(--window-dark);
+    }
+    .titlebar{
+      display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:10px;
+      padding:6px 10px; background:var(--titlebar); color:var(--title-text); cursor:move; position:sticky; top:0; z-index:2;
+    }
+    .titlebar h1{ font-size:14px; font-weight:600; margin:0; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; justify-self:center; }
+
+    /* Single close button (left side) */
+    .btn-close{ appearance:none; border:none; background:#cfcfcf; width:16px; height:16px; display:inline-block; cursor:pointer; }
+    .btn-close{ box-shadow: inset -1px -1px 0 #555, inset 1px 1px 0 #fff; border:1px solid #333; }
+    .btn-close:before{ content:"✕"; display:block; text-align:center; line-height:14px; font-size:12px; color:#111; }
+
+    .window-body{ padding:14px; }
+
+    /* Layout */
+    .grid{ display:grid; gap:12px; }
+    @media (min-width: 720px){ .grid-2{ grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 980px){ .grid-3{ grid-template-columns: repeat(3, 1fr); } }
+
+    .card{ background:#eee; padding:10px; border:1px solid #8c8c8c; box-shadow: inset -1px -1px 0 #777, inset 1px 1px 0 #fff; }
+    .card h3{ margin:6px 0 8px; font-size:15px; }
+
+    /* Media blocks */
+    .media{ position:relative; overflow:hidden; aspect-ratio: 16/9; background:#bbb; }
+    .media img, .media video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* Lists */
+    .list{ list-style:none; padding:0; margin:0; }
+    .list li{ padding:8px 6px; background:#efefef; border:1px solid #9a9a9a; margin-bottom:6px; box-shadow: inset -1px -1px 0 #777, inset 1px 1px 0 #fff; }
+
+    /* Footer */
+    footer{ text-align:center; font-size:12px; color:#111; opacity:.8; margin:24px 0; }
+
+    /* Utility */
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+  </style>
+</head>
+<body>
+  <!-- White menu bar -->
+  <div class="menubar" role="navigation" aria-label="Menu bar">
+    <div class="menubar-left">
+      <img class="brand-logo" src="icons/logo.png" alt="Sheltron logo" />
+      <span class="brand-name">sheltron.online</span>
+    </div>
+    <div class="menubar-spacer"></div>
+    <time id="menubar-clock" class="clock" aria-live="polite">--:--</time>
+  </div>
+
+  <div class="container">
+    <!-- Desktop (Mac OS 9-style) with app icons -->
+    <div class="desktop" role="region" aria-label="Desktop">
+      <button class="app-icon" data-open="#window-dj" aria-label="Open DJ">
+        <img src="icons/dj.png" alt="DJ icon" />
+        <span>DJ</span>
+      </button>
+      <button class="app-icon" data-open="#window-photo" aria-label="Open Photo/Video">
+        <img src="icons/photo.png" alt="Photo/Video icon" />
+        <span>Photo / Video</span>
+      </button>
+      <button class="app-icon" data-open="#window-design" aria-label="Open Design">
+        <img src="icons/design.png" alt="Design icon" />
+        <span>Design</span>
+      </button>
+    </div>
+
+    <!-- DJ WINDOW -->
+    <section class="window" id="window-dj" aria-label="DJ window">
+      <div class="titlebar" data-drag-handle>
+        <button class="btn-close" aria-label="Close DJ window" data-close></button>
+        <h1>DJ</h1>
+        <span></span>
+      </div>
+      <div class="window-body">
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Upcoming Gigs</h3>
+            <ul class="list" id="gigs">
+              <li><strong>Sep 14, 2025</strong> — First Ave (Mainroom) — Minneapolis, MN</li>
+              <li><strong>Oct 03, 2025</strong> — The Hideout — Chicago, IL</li>
+              <li><strong>Nov 21, 2025</strong> — Resident — Los Angeles, CA</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Listen — Mixes & Tracks</h3>
+            <p>Embed SoundCloud, Mixcloud, or YouTube. Replace the src with your links.</p>
+            <div class="media" style="margin-bottom:8px">
+              <iframe title="Sheltron Mix" width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="media">
+              <iframe title="Sheltron SoundCloud" width="100%" height="100%" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123&visual=true"></iframe>
+            </div>
+          </div>
+          <div class="card" style="grid-column: 1/-1;">
+            <h3>Past Gigs — Photo/Video Highlights</h3>
+            <div class="grid grid-3" id="dj-gallery">
+              <figure class="media"><img alt="Gig photo 1" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop"/></figure>
+              <figure class="media"><img alt="Gig photo 2" src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop"/></figure>
+              <figure class="media"><img alt="Gig photo 3" src="https://images.unsplash.com/photo-1514525253161-9bf8b63e6f32?q=80&w=1200&auto=format&fit=crop"/></figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHOTO/VIDEO WINDOW -->
+    <section class="window" id="window-photo" aria-label="Photo/Video window">
+      <div class="titlebar" data-drag-handle>
+        <button class="btn-close" aria-label="Close Photo/Video window" data-close></button>
+        <h1>Photo / Video</h1>
+        <span></span>
+      </div>
+      <div class="window-body">
+        <div class="card" style="margin-bottom:12px;">
+          <h3>Photography & Video</h3>
+          <p>A responsive gallery. Replace image URLs with your work; you can also link to full-resolution versions.</p>
+        </div>
+        <div class="grid grid-3" id="photo-gallery">
+          <a class="media" href="#" aria-label="Open full image"><img alt="Photo 1" src="https://images.unsplash.com/photo-1526481280698-8fcc13fd4ae0?q=80&w=1200&auto=format&fit=crop"/></a>
+          <a class="media" href="#"><img alt="Photo 2" src="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=1200&auto=format&fit=crop"/></a>
+          <a class="media" href="#"><img alt="Photo 3" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"/></a>
+          <a class="media" href="#"><img alt="Photo 4" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1200&auto=format&fit=crop"/></a>
+          <a class="media" href="#"><img alt="Photo 5" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"/></a>
+          <a class="media" href="#"><img alt="Photo 6" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop"/></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESIGN WINDOW -->
+    <section class="window" id="window-design" aria-label="Design window">
+      <div class="titlebar" data-drag-handle>
+        <button class="btn-close" aria-label="Close Design window" data-close></button>
+        <h1>Design</h1>
+        <span></span>
+      </div>
+      <div class="window-body">
+        <div class="card" style="margin-bottom:12px;">
+          <h3>Graphic Design</h3>
+          <p>Gallery with captions for project context. Use the <em>figcaption</em> to describe tools, role, and outcomes.</p>
+        </div>
+        <div class="grid grid-3" id="design-gallery">
+          <figure class="card">
+            <div class="media"><img alt="Brand project" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop"/></div>
+            <figcaption><strong>IndexCrate</strong> — Logo + identity system exploring DJ library tooling. Role: Design. Tools: Illustrator. Outcome: lightweight, readable mark for small UI.</figcaption>
+          </figure>
+          <figure class="card">
+            <div class="media"><img alt="Poster project" src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=1200&auto=format&fit=crop"/></div>
+            <figcaption><strong>Event Poster</strong> — 80s HUD-inspired typographic poster series for club night. Role: Design/Art Direction. Print + socials.</figcaption>
+          </figure>
+          <figure class="card">
+            <div class="media"><img alt="Web project" src="https://images.unsplash.com/photo-1547658719-3d90f0a512d9?q=80&w=1200&auto=format&fit=crop"/></div>
+            <figcaption><strong>Client Microsite</strong> — Single-page launch site built as static HTML/CSS for fast load and easy maintenance on GitHub Pages.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      sheltron.online</a> © <span id="year"></span>
+    </footer>
+  </div>
+
+  <script>
+    // ===== Menu bar clock =====
+    function updateClock(){
+      const el = document.getElementById('menubar-clock');
+      const opts = { weekday:'short', year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' };
+      const now = new Date();
+      el.textContent = new Intl.DateTimeFormat(undefined, opts).format(now);
+    }
+    updateClock(); setInterval(updateClock, 30_000);
+
+    // ===== Helpers: bring-to-front stacking & clamping =====
+    let zCounter = 100;
+    function bringToFront(win){ win.style.zIndex = ++zCounter; }
+
+    function clampWindow(win){
+      // Ensure the window stays within the viewport bounds with an 8px margin
+      const margin = 8;
+      const w = win.offsetWidth;
+      const h = Math.min(win.offsetHeight, window.innerHeight - parseInt(getComputedStyle(document.body).paddingTop) - 16);
+      const maxLeft = Math.max(margin, window.innerWidth - w - margin);
+      const maxTop  = Math.max(margin + parseInt(getComputedStyle(document.body).paddingTop), window.innerHeight - h - margin);
+      let left = parseInt(win.style.left || (window.innerWidth - w)/2, 10);
+      let top  = parseInt(win.style.top || (parseInt(getComputedStyle(document.body).paddingTop) + 16), 10);
+      left = Math.min(Math.max(left, margin), maxLeft);
+      top  = Math.min(Math.max(top, parseInt(getComputedStyle(document.body).paddingTop) + 8), maxTop);
+      win.style.left = left + 'px';
+      win.style.top  = top + 'px';
+      win.style.transform = 'none';
+    }
+
+    // ===== Desktop icon behavior: select (single click) + open (double click) =====
+    const icons = document.querySelectorAll('.app-icon');
+    function clearIconSelection(){ icons.forEach(i=> i.classList.remove('selected')); }
+
+    icons.forEach(btn => {
+      btn.addEventListener('click', ()=>{ clearIconSelection(); btn.classList.add('selected'); });
+      btn.addEventListener('dblclick', ()=>{ clearIconSelection(); openWindow(btn.dataset.open); });
+      btn.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ openWindow(btn.dataset.open); }});
+      btn.setAttribute('tabindex','0');
+    });
+
+    function openWindow(selector){
+      const win = document.querySelector(selector);
+      if(!win) return;
+      win.classList.add('active');
+      bringToFront(win);
+      if(!win.style.left){ // place centered on first open
+        const left = Math.max(8, (window.innerWidth - win.offsetWidth)/2);
+        win.style.left = left + 'px';
+        win.style.top = (parseInt(getComputedStyle(document.body).paddingTop) + 16) + 'px';
+        win.style.transform = 'none';
+      }
+      clampWindow(win);
+      const firstHeading = win.querySelector('h3, h1');
+      if(firstHeading){ firstHeading.setAttribute('tabindex','-1'); firstHeading.focus({preventScroll:true}); }
+    }
+
+    // Close buttons
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const win = e.currentTarget.closest('.window');
+        if(win){ win.classList.remove('active'); }
+      });
+    });
+
+    // Focus/bring-to-front when clicking anywhere in a window
+    document.querySelectorAll('.window').forEach(win => {
+      win.addEventListener('mousedown', () => bringToFront(win));
+    });
+
+    // ===== Draggable windows with viewport clamping =====
+    function makeDraggable(win){
+      const handle = win.querySelector('[data-drag-handle]');
+      let dragging=false, startX=0, startY=0, startLeft=0, startTop=0;
+
+      // Ensure fixed positioning for viewport-relative dragging
+      win.style.position = 'fixed';
+
+      handle.addEventListener('mousedown', (e)=>{
+        // don't start drag when clicking the close button
+        if((e.target).closest('.btn-close')) return;
+        dragging = true; bringToFront(win);
+        startX = e.clientX; startY = e.clientY;
+        startLeft = parseInt(win.style.left || 0, 10);
+        startTop = parseInt(win.style.top || 0, 10);
+        document.body.style.userSelect = 'none';
+      });
+
+      document.addEventListener('mousemove', (e)=>{
+        if(!dragging) return;
+        const dx = e.clientX - startX; const dy = e.clientY - startY;
+        win.style.left = (startLeft + dx) + 'px';
+        win.style.top = (startTop + dy) + 'px';
+        clampWindow(win);
+      });
+
+      document.addEventListener('mouseup', ()=>{ dragging=false; document.body.style.userSelect=''; });
+    }
+
+    document.querySelectorAll('.window').forEach(makeDraggable);
+
+    // Re-clamp on resize/rotation
+    window.addEventListener('resize', ()=>{
+      document.querySelectorAll('.window.active').forEach(clampWindow);
+    });
+
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
